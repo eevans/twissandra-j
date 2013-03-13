@@ -1,0 +1,11 @@
+<web>
+  <servlet>
+    <servlet-name>tweetsServlet</servlet-name>
+    <servlet-class>org.opennms.twissandra.webapp.internal.TweetsServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>tweetsServlet</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+</web>
