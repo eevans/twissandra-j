@@ -1,0 +1,11 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+  <bean id="repository" class="org.opennms.twissandra.persistence.memory.internal.MemoryTweetRepository"/>
+  
+  <service id="repositoryRegistration" ref="repository" interface="org.opennms.twissandra.api.TweetRepository">
+    <service-properties>
+      <entry key="impl" value="memory"/>
+    </service-properties>
+  </service>
+
+</blueprint>

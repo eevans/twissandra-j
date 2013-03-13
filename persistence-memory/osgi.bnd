@@ -1,1 +1,1 @@
-Bundle-Activator: org.opennms.twissandra.persistence.memory.internal.MyActivator
+#Bundle-Activator: org.opennms.twissandra.persistence.memory.internal.MyActivator

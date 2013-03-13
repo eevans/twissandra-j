@@ -24,6 +24,7 @@ public class Tweet {
 	public String getPostedBy() {
 		return postedBy;
 	}
+	
 	public void setPostedBy(String postedBy) {
 		this.postedBy = postedBy;
 	}

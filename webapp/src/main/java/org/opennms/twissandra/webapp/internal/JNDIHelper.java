@@ -16,8 +16,7 @@ public class JNDIHelper {
 					+ TweetRepository.class.getName());
 		} catch (NamingException e) {
 			e.printStackTrace();
-			IOException ioe = new IOException(
-					"TweetRepository resolution failed");
+			IOException ioe = new IOException("TweetRepository resolution failed");
 			ioe.initCause(e);
 			throw ioe;
 		}
