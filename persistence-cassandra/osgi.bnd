@@ -1,0 +1,5 @@
+Export-Package: !org.opennms.twissandra.persistence.cassandra.internal
+Import-Package: com.google.protobuf;resolution:=optional,com.googlecode.concurrentlinkedhashmap;resolution:=optional,com.sun.jna;resolution:=optional,jline;resolution:=optional,org.yaml.*;resolution:=optional,org.github.jamm;resolution:=optional,org.apache.hadoop.*;resolution:=optional,org.apache.pig.*;resolution:=optional,org.apache.http.*;resolution:=optional,junit.*;resolution:=optional,org.apache.avro.*;resolution:=optional,sun.*;resolution:=optional,org.jboss.*;resolution:=optional,org.cliffc.*;resolution:=optional,*
+Embed-Dependency: *;artifactId=cassandra-driver-core|guava|metrics-core|netty|cassandra-thrift|libthrift|jackson-core-asl|jackson-mapper-asl|compress-lzf|snaptree|antlr-runtime|stringtemplate|antlr,*;groupId=org.apache.cassandra
+#Embed-Dependency: *;scope=compile|runtime;artifactId=!slf4j
+Embed-Transitive: true

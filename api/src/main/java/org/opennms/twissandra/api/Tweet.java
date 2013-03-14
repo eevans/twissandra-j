@@ -1,40 +1,35 @@
 package org.opennms.twissandra.api;
 
+import java.util.Date;
 import java.util.UUID;
 
-public class Tweet {
+public class Tweet implements Comparable<Tweet> {
 	
-	private UUID id;
-	private String postedBy;
-	private String body;
-	
-	public Tweet() {}
-	
-	public Tweet(String postedBy, String body) {
+	private final UUID id;
+	private final Date postedAt;
+	private final String postedBy;
+	private final String body;
+
+	public Tweet(String postedBy, String body, UUID id, Date postedAt) {
 		this.postedBy = postedBy;
 		this.body = body;
+		this.id = id;
+		this.postedAt = postedAt;
 	}
 	
 	public UUID getId() {
 		return id;
 	}
-	public void setId(UUID id) {
-		this.id = id;
-	}
 	public String getPostedBy() {
 		return postedBy;
-	}
-	
-	public void setPostedBy(String postedBy) {
-		this.postedBy = postedBy;
 	}
 	public String getBody() {
 		return body;
 	}
-	public void setBody(String body) {
-		this.body = body;
+	public Date getPostedAt() {
+		return postedAt;
 	}
-	
-	
-
+	public int compareTo(Tweet o) {
+		return this.postedAt.compareTo(o.postedAt);
+	}
 }

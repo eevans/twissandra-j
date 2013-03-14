@@ -16,11 +16,13 @@ public interface TweetRepository {
 	
 	List<Tweet> getTimeline(String username, Date start, int limit);
 	
+	List<Tweet> getTweets(Date start, int limit);
+	
 	Tweet getTweet(UUID id);
 	
 	void saveUser(String username, String password);
 	
-	void saveTweet(String username, String body);
+	Tweet saveTweet(String username, String body);
 	
 	void addFriend(String username, String friend);
 	

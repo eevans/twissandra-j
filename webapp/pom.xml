@@ -32,15 +32,31 @@
             <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
             <Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*</Export-Package>
             <Private-Package>${bundle.namespace}.internal.*</Private-Package>
-            <Import-Package>javax.servlet*;version=2.5,*</Import-Package>
+            <Import-Package>org.opennms.*;version=${project.version},javax.servlet.annotation*;resolution:=optional,javax.servlet.jsp.*;version=2.1,javax.servlet*;version=2.5,*;resolution:=optional</Import-Package>
+	    <Embed-Dependency>*;scope=runtime|compile</Embed-Dependency>
+	    <Embed-Transitive>true</Embed-Transitive>
+            <Embed-Directory>WEB-INF/lib</Embed-Directory>
             <_wab>src/main/webapp</_wab>
           </instructions>
-        </configuration>
+	</configuration>
       </plugin>
     </plugins>
   </build>
 
   <dependencies>
+
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>3.1.2.RELEASE</version>
+    </dependency>
   
     <dependency>
       <groupId>org.opennms.twissandra</groupId>
