@@ -63,9 +63,10 @@ public class CassandraTweetRepository implements TweetRepository {
 		return followers;
 	}
 
+	/** {@inheritDoc} */
 	public List<Tweet> getUserline(String username, Date start, int limit) {
 		ResultSet queryResult = execute(
-				"SELECT posted_at, body FROM userline WHERE username = '%s' AND posted_at >= '%s' LIMIT %d",
+				"SELECT posted_at, body FROM userline WHERE username = '%s' AND posted_at < maxTimeuuid('%s') ORDER BY posted_at DESC LIMIT %d",
 				username,
 				formatDate(start),
 				limit);
@@ -79,9 +80,10 @@ public class CassandraTweetRepository implements TweetRepository {
 		return tweets;
 	}
 
+	/** {@inheritDoc} */
 	public List<Tweet> getTimeline(String username, Date start, int limit) {
 		ResultSet queryResult = execute(
-				"SELECT posted_at, posted_by, body FROM timeline WHERE username = '%s' AND posted_at >= '%s' LIMIT %d",
+				"SELECT posted_at, posted_by, body FROM timeline WHERE username = '%s' AND posted_at < maxTimeuuid('%s') ORDER BY posted_at DESC LIMIT %d",
 				username,
 				formatDate(start),
 				limit);
