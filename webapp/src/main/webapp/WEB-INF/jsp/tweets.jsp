@@ -10,7 +10,7 @@
 <title>Public Tweets</title>
 </head>
 <body>
-<h1>The most recent tweets!</h1>
+<h1>The most recent tweets for ${username}!</h1>
 
 <dl>
 <%
