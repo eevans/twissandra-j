@@ -57,6 +57,18 @@
       <artifactId>spring-webmvc</artifactId>
       <version>3.1.2.RELEASE</version>
     </dependency>
+    
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+      <version>3.1.2.RELEASE</version>
+    </dependency>
+  
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+      <version>3.1.2.RELEASE</version>
+    </dependency>
   
     <dependency>
       <groupId>org.opennms.twissandra</groupId>
@@ -94,7 +106,7 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
   </dependencies>
 
 </project>

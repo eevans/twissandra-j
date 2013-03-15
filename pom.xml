@@ -14,10 +14,10 @@
   <modules>
     <module>api</module>
     <module>persistence-memory</module>
-    <module>webapp</module>
-<!--
     <module>persistence-cassandra</module>
--->
+    <module>webapp</module>
+    <module>feature-memory</module>
+    <module>feature-cassandra</module>
   </modules>
 
   <properties>
@@ -60,6 +60,22 @@
       </plugin>
     </plugins>
 
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.opennms.maven.plugins</groupId>
+          <artifactId>features-maven-plugin</artifactId>
+          <version>1.0.1</version>
+          <executions>
+            <execution>
+              <id>features.xml</id>
+              <phase>process-resources</phase>
+              <goals><goal>generate-features-xml</goal></goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
 <!--
@@ -90,6 +106,13 @@
       <snapshots><enabled>false</enabled></snapshots>
     </pluginRepository>
     <pluginRepository>
+      <snapshots><enabled>false</enabled></snapshots>
+      <releases><enabled>true</enabled></releases>
+      <id>opennms-repo</id>
+      <name>OpenNMS Repository</name>
+      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
+    </pluginRepository>
+    <pluginRepository>
       <snapshots><enabled>true</enabled></snapshots>
       <releases><enabled>false</enabled></releases>
       <id>opennms-snapshots</id>
@@ -97,6 +120,7 @@
       <url>http://maven.opennms.org/content/groups/opennms.org-snapshot</url>
     </pluginRepository>
   </pluginRepositories>
+
   
   <dependencyManagement>
     <dependencies>
@@ -131,7 +155,83 @@
         <artifactId>junit</artifactId>
         <version>4.8.1</version>
       </dependency>
-    </dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-context</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-jdbc</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-tx</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-aop</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-context-support</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-web</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-asm</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-core</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-webmvc</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-beans</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+	<artifactId>spring-expression</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-core</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-web</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-config</artifactId>
+	<version>3.1.2.RELEASE</version>
+      </dependency>
+
+  </dependencies>
   </dependencyManagement>
 
 </project>

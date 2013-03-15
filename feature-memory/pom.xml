@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <groupId>org.opennms.twissandra</groupId>
+    <artifactId>twissandra-j</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.opennms.twissandra</groupId>
+  <artifactId>twissandra-memory</artifactId>
+
+  <name>Twissandra for Java Feature :: Memory</name>
+
+  <description>Feature for complete twissandra application with memory backend.</description>
+
+  <packaging>pom</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.opennms.maven.plugins</groupId>
+        <artifactId>features-maven-plugin</artifactId>
+        <configuration>
+          <features>
+            <feature>war</feature>
+            <feature>jndi</feature>
+          </features>
+B
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!-- api in feature -->
+    <dependency>
+      <groupId>org.opennms.twissandra</groupId>
+      <artifactId>api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- the memory persistence module -->
+    <dependency>
+      <groupId>org.opennms.twissandra</groupId>
+      <artifactId>persistence-memory</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- webapp -->
+    <dependency>
+      <groupId>org.opennms.twissandra</groupId>
+      <artifactId>webapp</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
