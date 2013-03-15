@@ -32,10 +32,12 @@ public class CassandraTweetRepository implements TweetRepository {
 		m_cassandraPort = cassandraPort;
 		m_keyspaceName = keyspaceName;
 		
-		LOG.info("Connecting to {}:{}", cassandraHost, cassandraPort);
+		LOG.info("Connecting to {}:{}...", cassandraHost, cassandraPort);
 
 		cluster = Cluster.builder().withPort(m_cassandraPort).addContactPoint(m_cassandraHost).build();
 		session = cluster.connect(m_keyspaceName);
+		
+		LOG.info("Connected.");
 	}
 
 	public String getPassword(String username) {
