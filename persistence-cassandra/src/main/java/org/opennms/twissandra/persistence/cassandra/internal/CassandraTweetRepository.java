@@ -96,7 +96,7 @@ public class CassandraTweetRepository implements TweetRepository {
 	}
 
 	public List<Tweet> getTweets(Date start, int limit) {
-		return getUserline(PUBLIC_USERLINE_KEY, start, limit);
+		return getTimeline(PUBLIC_USERLINE_KEY, start, limit);
 	}
 
 	public Tweet getTweet(UUID id) {
@@ -122,9 +122,10 @@ public class CassandraTweetRepository implements TweetRepository {
 				id.toString(),
 				body);
 		// Store the tweet in the public userline
-		execute("INSERT INTO userline (username, posted_at, body) VALUES (%s, '%s', '%s')",
+		execute("INSERT INTO timeline (username, posted_at, posted_by, body) VALUES (%s, '%s', '%s', '%s')",
 				PUBLIC_USERLINE_KEY,
 				id.toString(),
+				username,
 				body);
 
 		// Inser the tweet into follower timelines
