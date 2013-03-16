@@ -20,13 +20,13 @@
  <!-- Concrete page. To use this page, your controller must return the name "publicLine" -->
  <definition name="publicLine" extends="template-base">
   <put-attribute name="title" value="Public Timeline - Twissandra-J" />
-  <put-attribute name="content" value="WEB-INF/jsp/contents/tweets.jsp" />
+  <put-attribute name="content" value="/WEB-INF/jsp/content/tweets.jsp" />
  </definition>
     
  <!-- Concrete page. To use this page, your controller must return the name "timeLine" -->
  <definition name="timeLine" extends="template-base">
   <put-attribute name="title" value="Personal Timeline - Twissandra-J" />
-  <put-attribute name="content" value="WEB-INF/jsp/contents/tweets.jsp" />
+  <put-attribute name="content" value="/WEB-INF/jsp/content/tweets.jsp" />
  </definition>
  
 </tiles-definitions>
