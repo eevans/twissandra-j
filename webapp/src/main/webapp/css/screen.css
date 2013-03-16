@@ -1,0 +1,30 @@
+body { background-color: #9E9996; }
+
+h2 { color: #665B56; }
+
+.container_12 { background-color: #FFF; height: 100%; }
+
+#logo a { font-size: 2em; font-weight: bolder; text-decoration: none; color: #F74; }
+
+#nav { padding-top: 5px; }
+#nav li { display: inline; }
+#nav li a { padding-top: 4px; padding-bottom: 4px; text-indent: 8px; }
+
+a { color: #665B56; }
+a:hover { color: #F74; text-decoration: underline; }
+
+li.more { font-size: 1.6em; background-color: #F7F7F7; text-align: center; }
+
+#poster input,#poster textarea { min-height: 80px; line-height: 40px; font-size: 2em; border: 1px solid #999; }
+#poster textarea { margin-left: 15px; width: 95%; }
+
+#timeline li { border-bottom: 1px solid #F7F7F7; list-style-type: none; margin: 0 12px 0 12px; padding: 12px 0 12px 12px; }
+#timeline li .username { width: 80px; display: block; float: left; }
+
+#sidebar { font-size: 1.2em; padding-top: 25px; color: #FCA377; }
+
+form ul { list-style-type: none; }
+form ul li { margin: 0; padding: 5px 0;}
+.auth label { width: 80px; display: block; float: left;}
+
+.clear { clear: both; }

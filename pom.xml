@@ -1,237 +1,241 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.opennms.twissandra</groupId>
-  <artifactId>twissandra-j</artifactId>
-  <version>1.0-SNAPSHOT</version>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.opennms.twissandra</groupId>
+	<artifactId>twissandra-j</artifactId>
+	<version>1.0-SNAPSHOT</version>
 
-  <name>Twissandra for Java</name>
+	<name>Twissandra for Java</name>
 
-  <packaging>pom</packaging>
+	<packaging>pom</packaging>
 
-  <modules>
-    <module>api</module>
-    <module>persistence-memory</module>
-    <module>persistence-cassandra</module>
-    <module>webapp</module>
-    <module>feature-memory</module>
-    <module>feature-cassandra</module>
-  </modules>
+	<modules>
+		<module>api</module>
+		<module>persistence-memory</module>
+		<module>persistence-cassandra</module>
+		<module>webapp</module>
+		<module>feature-memory</module>
+		<module>feature-cassandra</module>
+	</modules>
 
-  <properties>
-    <karafVersion>2.3.0</karafVersion>
-    <osgiVersion>4.3.0</osgiVersion>
-    <slf4jVersion>1.6.4</slf4jVersion>
-    <servletApiVersion>2.5</servletApiVersion>
-  </properties>
+	<properties>
+		<karafVersion>2.3.0</karafVersion>
+		<osgiVersion>4.3.0</osgiVersion>
+		<slf4jVersion>1.6.4</slf4jVersion>
+		<servletApiVersion>2.5</servletApiVersion>
+	</properties>
 
-  <build>
-    <plugins>
-      <plugin>
-        <!--
-         | the following instructions build a simple set of public/private classes into an OSGi bundle
-        -->
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
-            <Bundle-Version>${project.version}</Bundle-Version>
-            <!--
-             | assume public classes are in the top package, and private classes are under ".internal"
-            -->
-            <Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
-            <Private-Package>${bundle.namespace}.internal.*</Private-Package>
-            <!--
-             | each module can override these defaults in their osgi.bnd file
-            -->
-            <_include>-osgi.bnd</_include>
-          </instructions>
-	  <supportedProjectTypes>
-            <supportedProjectType>jar</supportedProjectType>
-            <supportedProjectType>bundle</supportedProjectType>
-            <supportedProjectType>war</supportedProjectType>
-	    </supportedProjectTypes>
-        </configuration>
-      </plugin>
-    </plugins>
+	<build>
+		<plugins>
+			<plugin>
+				<!-- | the following instructions build a simple set of public/private 
+					classes into an OSGi bundle -->
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<!-- | assume public classes are in the top package, and private classes 
+							are under ".internal" -->
+						<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
+						<Private-Package>${bundle.namespace}.internal.*</Private-Package>
+						<!-- | each module can override these defaults in their osgi.bnd file -->
+						<_include>-osgi.bnd</_include>
+					</instructions>
+					<supportedProjectTypes>
+						<supportedProjectType>jar</supportedProjectType>
+						<supportedProjectType>bundle</supportedProjectType>
+						<supportedProjectType>war</supportedProjectType>
+					</supportedProjectTypes>
+				</configuration>
+			</plugin>
+		</plugins>
 
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.opennms.maven.plugins</groupId>
-          <artifactId>features-maven-plugin</artifactId>
-          <version>1.0.1</version>
-          <executions>
-            <execution>
-              <id>features.xml</id>
-              <phase>process-resources</phase>
-              <goals><goal>generate-features-xml</goal></goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.opennms.maven.plugins</groupId>
+					<artifactId>features-maven-plugin</artifactId>
+					<version>1.0.1</version>
+					<executions>
+						<execution>
+							<id>features.xml</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>generate-features-xml</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
-<!--
-  <repositories>
-    <repository>
-      <id>servicemix</id>
-      <name>Apache ServiceMix Repository</name>
-      <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </repository>
-    <repository>
-      <snapshots><enabled>false</enabled><updatePolicy>${updatePolicy}</updatePolicy></snapshots>
-      <releases><enabled>true</enabled><updatePolicy>${updatePolicy}</updatePolicy></releases>
-      <id>opennms-repo</id>
-      <name>OpenNMS Repository</name>
-      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
-    </repository>
-  </repositories>
--->
+	<!-- <repositories> <repository> <id>servicemix</id> <name>Apache ServiceMix 
+		Repository</name> <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url> 
+		<releases><enabled>true</enabled></releases> <snapshots><enabled>false</enabled></snapshots> 
+		</repository> <repository> <snapshots><enabled>false</enabled><updatePolicy>${updatePolicy}</updatePolicy></snapshots> 
+		<releases><enabled>true</enabled><updatePolicy>${updatePolicy}</updatePolicy></releases> 
+		<id>opennms-repo</id> <name>OpenNMS Repository</name> <url>http://maven.opennms.org/content/groups/opennms.org-release</url> 
+		</repository> </repositories> -->
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>servicemix</id>
-      <name>Apache ServiceMix Repository</name>
-      <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <snapshots><enabled>false</enabled></snapshots>
-      <releases><enabled>true</enabled></releases>
-      <id>opennms-repo</id>
-      <name>OpenNMS Repository</name>
-      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
-    </pluginRepository>
-    <pluginRepository>
-      <snapshots><enabled>true</enabled></snapshots>
-      <releases><enabled>false</enabled></releases>
-      <id>opennms-snapshots</id>
-      <name>OpenNMS Snapshot Maven Repository</name>
-      <url>http://maven.opennms.org/content/groups/opennms.org-snapshot</url>
-    </pluginRepository>
-  </pluginRepositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>servicemix</id>
+			<name>Apache ServiceMix Repository</name>
+			<url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<id>opennms-repo</id>
+			<name>OpenNMS Repository</name>
+			<url>http://maven.opennms.org/content/groups/opennms.org-release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<id>opennms-snapshots</id>
+			<name>OpenNMS Snapshot Maven Repository</name>
+			<url>http://maven.opennms.org/content/groups/opennms.org-snapshot</url>
+		</pluginRepository>
+	</pluginRepositories>
 
-  
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
-	<version>${servletApiVersion}</version>
-      </dependency>
 
-      <dependency>
-        <groupId>org.apache.karaf.shell</groupId>
-        <artifactId>org.apache.karaf.shell.console</artifactId>
-        <version>${karafVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.osgi</groupId>
-        <artifactId>org.osgi.core</artifactId>
-        <version>${osgiVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.osgi</groupId>
-        <artifactId>org.osgi.compendium</artifactId>
-        <version>${osgiVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${slf4jVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.8.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-aop</artifactId>
-        <version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-context</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-jdbc</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-tx</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-aop</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-context-support</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-web</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-asm</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-core</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-webmvc</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-beans</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-	<artifactId>spring-expression</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-core</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-web</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-config</artifactId>
-	<version>3.1.2.RELEASE</version>
-      </dependency>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>${servletApiVersion}</version>
+			</dependency>
 
-  </dependencies>
-  </dependencyManagement>
+			<dependency>
+				<groupId>org.apache.karaf.shell</groupId>
+				<artifactId>org.apache.karaf.shell.console</artifactId>
+				<version>${karafVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+				<version>${osgiVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.compendium</artifactId>
+				<version>${osgiVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4jVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-asm</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-expression</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-taglibs</artifactId>
+				<version>3.1.2.RELEASE</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
 
 </project>

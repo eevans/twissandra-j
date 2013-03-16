@@ -1,5 +1,6 @@
 package org.opennms.twissandra.webapp.internal;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
 @Controller
@@ -23,14 +25,27 @@ public class TweetsController {
 	}
 	
 	@RequestMapping("/index.htm")
-	public String allTweets(Model model) {
-		List<Tweet> tweets = m_tweetRepository.getTweets(new Date(), 50);
+	public String allTweets(Model model, Principal principal, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue="50")int limit) {
+		if (start == null) {
+			start = new Date();
+		}
+		if (principal == null) {
+			List<Tweet> tweets = m_tweetRepository.getTweets(start, limit);
+			// TODO: Add code that sets 'next' to the timestamp of the last one
+			model.addAttribute("tweets", tweets);
+			return "publicLine";
+		} else {
+			List<Tweet> tweets = m_tweetRepository.getTimeline(principal.getName(), start, 50);
+			model.addAttribute("tweets", tweets);
+			// TODO: Add code that sets 'next' to the timestamp of the last one
+			return "timeLine";
+		}
 		
-		model.addAttribute("username", "The Public");
-		model.addAttribute("tweets", tweets);
-		
-		return "tweets";
-		
+	}
+	
+	@RequestMapping("/login.htm")
+	public String showRegistrationUser() {
+		return "loginForm";
 	}
 	
 	@RequestMapping("/{username}/index.htm")

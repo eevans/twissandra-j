@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.opennms.twissandra.api.TweetRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class UserService implements UserDetailsService {
+	
+	public static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 	
 	private static class User implements UserDetails {
 		
@@ -60,6 +64,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		LOG.info("Looking for user named {}", username);
 		String password = m_tweetRepository.getPassword(username);
 		if (password == null) {
 			throw new UsernameNotFoundException("No user named " + username);

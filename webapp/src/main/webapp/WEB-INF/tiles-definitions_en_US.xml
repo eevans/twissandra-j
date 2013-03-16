@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+  
+ <!--
+  We declare a new template named template-base.
+  This template is used for displaying the main page.
+  It has 4 attributes. These attributes are placeholder for our contents
+  For each attribute, we have assigned a corresponding JSP
+ -->
+ <definition name="template-base" template="/WEB-INF/jsp/layouts/base.jsp">
+  <put-attribute name="title" value="Twissandra-J" />
+  <put-attribute name="description" value="Twissandra is an example Twitter implementation, using Cassandra" />
+  <put-attribute name="content" value="" />
+  <put-attribute name="sidebar" value="" />
+ </definition>
+  
+ <!-- Concrete page. To use this page, your controller must return the name "publicLine" -->
+ <definition name="publicLine" extends="template-base">
+  <put-attribute name="title" value="Public Timeline - Twissandra-J" />
+  <put-attribute name="content" value="WEB-INF/jsp/contents/tweets.jsp" />
+ </definition>
+    
+ <!-- Concrete page. To use this page, your controller must return the name "timeLine" -->
+ <definition name="timeLine" extends="template-base">
+  <put-attribute name="title" value="Personal Timeline - Twissandra-J" />
+  <put-attribute name="content" value="WEB-INF/jsp/contents/tweets.jsp" />
+ </definition>
+ 
+</tiles-definitions>

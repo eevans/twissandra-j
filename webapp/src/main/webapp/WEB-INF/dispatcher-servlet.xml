@@ -20,10 +20,23 @@
     	<property name="tweetRepository" ref="tweetRepository" />
     </bean>
 
+    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles-definitions.xml</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
+    </bean>
+
+<!-- 
+   <bean id="jstlViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1">
       <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
       <property name="prefix" value="/WEB-INF/jsp/"/>
       <property name="suffix" value=".jsp"/>
     </bean>
-
+ -->
 </beans>

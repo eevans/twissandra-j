@@ -1,14 +1,26 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
              xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-                                 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+			 xmlns:jee="http://www.springframework.org/schema/jee"
+             xsi:schemaLocation="
+             http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+             http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+             ">
 
-    <http auto-config="true" />
 
-    <beans:bean id="myUserService" class="org.opennms.twissandra.webapp.internal.UserService" />
+	<jee:jndi-lookup id="tweetRepository" jndi-name="osgi:service/org.opennms.twissandra.api.TweetRepository" />
 
-    <authentication-manager>
-      <authentication-provider user-service-ref="myUserService" />
+    <http use-expressions="true" auto-config="true">
+    	<intercept-url pattern="/**" access="permitAll"/>
+		<form-login login-page='/login.htm' default-target-url='/index.htm' always-use-default-target='true' />
+    </http>
+    
+	<authentication-manager>
+      <authentication-provider user-service-ref="myUserService"/>
     </authentication-manager>
-
+  
+    <beans:bean id="myUserService" class="org.opennms.twissandra.webapp.internal.UserService">
+      <beans:property name="tweetRepository" ref="tweetRepository" />
+    </beans:bean>
+  
 </beans:beans>
