@@ -49,6 +49,11 @@ with Cassandra):
 
 ### Starting Karaf and twissandra-j
 
+In order to be able to use the webapp correctly you must change the osgi
+implementation in your karaf distribution to do this you must change
+the karaf.framework property in <KARAF-HOME/etc/config.properties from
+'felix' to 'equinox'.
+
 From the top-level directory of your Karaf installation, start karaf with
 a console, and install the `twisssandra-cassandra` feature:
 
