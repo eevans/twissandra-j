@@ -34,7 +34,7 @@
   <c:url var="publiclineUrl" value="/index.htm" />
   <c:url var="findFriendsUrl" value="/findFriends.htm" />
   <c:url var="loginUrl" value="/login.htm" />
-  <c:url var="/logoutUrl" value="/logout.htm" />
+  <c:url var="logoutUrl" value="/logout.htm" />
   <div class="container_12 clearfix">
     <div id="header">
       <div id="logo" class="grid_7">
@@ -46,10 +46,10 @@
         <li><a href="${findFriendsUrl}">Find Friends</a></li>
 
         <sec:authorize access="isAuthenticated()">
-        <li><a href="{% url "logout" %}">Sign out of ${principal.name}</a></li>
+        <li><a href="${logoutUrl}">Sign out of ${principal.name}</a></li>
         </sec:authorize>
         <sec:authorize access="!isAuthenticated()">
-        <li><a href="{% url "login" %}">Login</a></li>
+        <li><a href="${loginUrl}">Login</a></li>
         </sec:authorize>
 
       </ul>

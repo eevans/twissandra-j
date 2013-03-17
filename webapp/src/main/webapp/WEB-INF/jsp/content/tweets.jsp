@@ -19,9 +19,9 @@
       </c:when>
       <c:otherwise>
         <c:forEach var="tweet" items="${tweets}">
-            <c:url var="posterUrl" value="/${tweet.username}/index.htm" />
+            <c:url var="posterUrl" value="/${tweet.postedBy}/index.htm" />
             <li>
-                <a href="${posterUrl}" class="username">${tweet.username}</a>
+                <a href="${posterUrl}" class="username">${tweet.postedBy}</a>
                 <span class="body">${fn:escapeXml(tweet.body)}</span>
             </li>
         </c:forEach>
