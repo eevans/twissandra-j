@@ -42,7 +42,8 @@ public class CassandraTweetRepository implements TweetRepository {
 
 	public String getPassword(String username) {
 		ResultSet queryResult = execute("SELECT password FROM users WHERE username = '%s'", username);
-		return getOneRow(queryResult).getString("password");
+		Row row = getOneRow(queryResult);
+		return row != null ? row.getString("password") : null;
 	}
 
 	public List<String> getFriends(String username) {
@@ -105,7 +106,7 @@ public class CassandraTweetRepository implements TweetRepository {
 
 	public Tweet getTweet(UUID id) {
 		Row row = getOneRow(execute("SELECT username, body FROM tweets WHERE id = %s", id.toString()));
-		return new Tweet(row.getString("username"), row.getString("body"), id, fromUUID1(id));
+		return row != null ? new Tweet(row.getString("username"), row.getString("body"), id, fromUUID1(id)) : null;
 	}
 
 	public void saveUser(String username, String password) {
