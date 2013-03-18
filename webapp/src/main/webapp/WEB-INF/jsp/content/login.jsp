@@ -17,10 +17,8 @@
                 <ul>
 		     	    <c:if test="${SPRING_SECURITY_LAST_EXCEPTION != null}">
 		     	    <li>
-		     	      <ul>
-		     	      	<li>Your login attempt was not successful. Please, try again.<br />
-			    			Reason: ${SPRING_SECURITY_LAST_EXCEPTION.message}
-			    	    </li>
+		     	      <ul class="errorlist">
+		     	      	<li>Login Failed:${SPRING_SECURITY_LAST_EXCEPTION.message}</li>
 		     	      </ul>
 		     	    </li>
 		     	    </c:if>
