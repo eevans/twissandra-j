@@ -122,12 +122,12 @@ public class CassandraTweetRepository implements TweetRepository {
 				username,
 				body);
 		// Store the tweet in this users userline
-		execute("INSERT INTO userline (username, posted_at, body) VALUES (%s, '%s', '%s')",
+		execute("INSERT INTO userline (username, posted_at, body) VALUES ('%s', %s, '%s')",
 				username,
 				id.toString(),
 				body);
 		// Store the tweet in the public userline
-		execute("INSERT INTO timeline (username, posted_at, posted_by, body) VALUES (%s, '%s', '%s', '%s')",
+		execute("INSERT INTO timeline (username, posted_at, posted_by, body) VALUES ('%s', %s, '%s', '%s')",
 				PUBLIC_USERLINE_KEY,
 				id.toString(),
 				username,
@@ -151,8 +151,8 @@ public class CassandraTweetRepository implements TweetRepository {
 	}
 
 	public void removeFriend(String username, String friend) {
-		execute("DELETE followed FROM following WHERE username = '%s' AND followed = '%s'", username, friend);
-		execute("DELETE following FROM followers WHERE username = '%s' AND following = '%s'", friend, username);
+		execute("DELETE FROM following WHERE username = '%s' AND followed = '%s'", username, friend);
+		execute("DELETE FROM followers WHERE username = '%s' AND following = '%s'", friend, username);
 	}
 
 	private Row getOneRow(ResultSet result) {
