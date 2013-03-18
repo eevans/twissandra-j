@@ -151,7 +151,7 @@ public class CassandraTweetRepository implements TweetRepository {
 
 	public void removeFriend(String username, String friend) {
 		execute("DELETE followed FROM following WHERE username = '%s' AND followed = '%s'", username, friend);
-		execute("DELETE following FROM followers WHERE username = '%s' AND following", friend, username);
+		execute("DELETE following FROM followers WHERE username = '%s' AND following = '%s'", friend, username);
 	}
 
 	private Row getOneRow(ResultSet result) {
