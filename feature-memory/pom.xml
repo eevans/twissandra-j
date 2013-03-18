@@ -48,6 +48,13 @@ B
       <version>${project.version}</version>
     </dependency>
 
+    <!-- the test tweet generator -->
+    <dependency>
+      <groupId>org.opennms.twissandra</groupId>
+      <artifactId>generator</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <!-- webapp -->
     <dependency>
       <groupId>org.opennms.twissandra</groupId>
