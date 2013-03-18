@@ -29,4 +29,10 @@
   <put-attribute name="content" value="/WEB-INF/jsp/content/tweets.jsp" />
  </definition>
  
+ <!-- Concrete page. To use this page, your controller must return the name "publicLine" -->
+ <definition name="login" extends="template-base">
+  <put-attribute name="title" value="Login - Twissandra-J" />
+  <put-attribute name="content" value="/WEB-INF/jsp/content/login.jsp" />
+ </definition>
+    
 </tiles-definitions>

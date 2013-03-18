@@ -29,24 +29,23 @@
   <link href="${screenCssUrl}" rel="stylesheet" type="text/css" media="screen,projection" />
 </head>
 <body>
-  <c:url var="homeUrl" value="/index.htm" />
-  <c:url var="timelineUrl" value="/index.htm" />
-  <c:url var="publiclineUrl" value="/index.htm" />
-  <c:url var="findFriendsUrl" value="/findFriends.htm" />
-  <c:url var="loginUrl" value="/login.htm" />
-  <c:url var="logoutUrl" value="/logout.htm" />
+  <c:url var="homeUrl" value="/" />
+  <c:url var="publiclineUrl" value="/public" />
+  <c:url var="findFriendsUrl" value="/find-friends" />
+  <c:url var="loginUrl" value="/login" />
+  <c:url var="logoutUrl" value="/j_spring_security_logout" />
   <div class="container_12 clearfix">
     <div id="header">
       <div id="logo" class="grid_7">
         <a href="${homeUrl}">${title}</a>
       </div>
       <ul id="nav" class="grid_5">
-        <li><a href="${timelineUrl}">Home</a></li>
+        <li><a href="${homeUrl}">Home</a></li>
         <li><a href="${publiclineUrl}">Public</a></li>
         <li><a href="${findFriendsUrl}">Find Friends</a></li>
 
         <sec:authorize access="isAuthenticated()">
-        <li><a href="${logoutUrl}">Sign out of ${principal.name}</a></li>
+        <li><a href="${logoutUrl}">Sign out of ${username}</a></li>
         </sec:authorize>
         <sec:authorize access="!isAuthenticated()">
         <li><a href="${loginUrl}">Login</a></li>

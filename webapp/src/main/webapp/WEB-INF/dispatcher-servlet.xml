@@ -14,11 +14,14 @@
 
     <mvc:annotation-driven />
 
-	<jee:jndi-lookup id="tweetRepository" jndi-name="osgi:service/org.opennms.twissandra.api.TweetRepository" />
+	<mvc:default-servlet-handler/>
 	
-    <bean class="org.opennms.twissandra.webapp.internal.TweetsController">
-    	<property name="tweetRepository" ref="tweetRepository" />
-    </bean>
+	<context:annotation-config />
+
+<!-- 
+	<jee:jndi-lookup id="tweetRepository" jndi-name="osgi:service/org.opennms.twissandra.api.TweetRepository" />
+ -->	
+    <bean class="org.opennms.twissandra.webapp.internal.TweetsController" />
 
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
         <property name="definitions">
