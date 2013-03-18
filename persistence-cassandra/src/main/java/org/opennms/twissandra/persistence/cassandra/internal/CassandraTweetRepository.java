@@ -146,6 +146,11 @@ public class CassandraTweetRepository implements TweetRepository {
 	}
 
 	public void addFriend(String username, String friend) {
+		if (username.equals(friend)) {
+			LOG.warn("Attempted to self-friend {} (no self-loving here, please).", username);
+			return;
+		}
+
 		execute("INSERT INTO following (username, followed) VALUES ('%s', '%s')", username, friend);
 		execute("INSERT INTO followers (username, following) VALUES ('%s', '%s')", friend, username);
 	}

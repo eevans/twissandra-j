@@ -12,7 +12,7 @@ import org.opennms.twissandra.api.TweetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Command(scope = "test", name = "generate", description="Generate Twissandra Test Data.")
+@Command(scope = "twissandra", name = "generate", description="Generate Twissandra Test Data.")
 public class GeneratorShellCommand extends OsgiCommandSupport {
 	private static final Logger LOG = LoggerFactory.getLogger(GeneratorShellCommand.class);
 	private static Random random = new Random();
