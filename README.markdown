@@ -66,3 +66,8 @@ port other than 9042, run the following as necessary in your karaf shell:
 
     karaf@root> config:propset -p org.opennms.twissandra.persistence.cassandra cassandraHost cass.sample.com
     karaf@root> config:propset -p org.opennms.twissandra.persistence.cassandra cassandraPort 9041
+
+If you would like to generate some random test data, run the following from
+the karaf shell:
+
+    karaf@root> twissandra:generate
