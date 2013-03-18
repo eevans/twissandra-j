@@ -71,3 +71,8 @@ If you would like to generate some random test data, run the following from
 the karaf shell:
 
     karaf@root> twissandra:generate
+
+### Profit
+
+If you've successfully reached this point, open up your browser and visit:
+http://localhost:8181/twissandra
