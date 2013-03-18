@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="
+             http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd
+         ">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opennms.twissandra</groupId>
+    <artifactId>twissandra-j</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>generator</artifactId>
+  <name>Twissandra for Java Test Data Generator</name>
+  <url>http://maven.apache.org</url>
+
+  <packaging>bundle</packaging>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <bundle.symbolicName>org.opennms.twissandra.generator</bundle.symbolicName>
+    <bundle.namespace>org.opennms.twissandra.generator</bundle.namespace>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <target>1.6</target>
+          <source>1.6</source>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.karaf.shell</groupId>
+      <artifactId>org.apache.karaf.shell.console</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.twissandra</groupId>
+      <artifactId>api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  
+</project>
