@@ -29,7 +29,7 @@ public class MemoryTweetRepository implements TweetRepository {
 
 	Map<UUID, Tweet> m_tweets = new HashMap<UUID, Tweet>();
 	
-	SortedSet<Tweet> m_sorted_tweets = new TreeSet<Tweet>();
+	SortedSet<Tweet> m_sorted_tweets = new TreeSet<Tweet>(Collections.reverseOrder());
 
 	public String getPassword(String username) {
 		LOG.trace("Searching for password of user {}", username);
