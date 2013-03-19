@@ -32,4 +32,11 @@ public class Tweet implements Comparable<Tweet> {
 	public int compareTo(Tweet o) {
 		return this.postedAt.compareTo(o.postedAt);
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder();
+		buf.append(postedBy).append(": ").append(body).append(" (").append(postedAt).append(")");
+		return buf.toString();
+	}
 }
