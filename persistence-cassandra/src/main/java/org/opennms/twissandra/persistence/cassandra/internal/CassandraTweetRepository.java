@@ -126,14 +126,20 @@ public class CassandraTweetRepository implements TweetRepository {
 				username,
 				id.toString(),
 				body);
-		// Store the tweet in the public userline
+		// Store the tweet in this users timeline
+		execute("INSERT INTO timeline (username, posted_at, posted_by, body) VALUES ('%s', %s, '%s', '%s')",
+				username,
+				id.toString(),
+				username,
+				body);
+		// Store the tweet in the public timeline
 		execute("INSERT INTO timeline (username, posted_at, posted_by, body) VALUES ('%s', %s, '%s', '%s')",
 				PUBLIC_USERLINE_KEY,
 				id.toString(),
 				username,
 				body);
 
-		// Inser the tweet into follower timelines
+		// Insert the tweet into follower timelines
 		for (String follower : getFollowers(username)) {
 			execute("INSERT INTO timeline (username, posted_at, posted_by, body) VALUES ('%s', %s, '%s', '%s')",
 					follower,
