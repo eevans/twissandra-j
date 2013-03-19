@@ -69,9 +69,9 @@ public class CassandraTweetRepository implements TweetRepository {
 	/** {@inheritDoc} */
 	public List<Tweet> getUserline(String username, Date start, int limit) {
 		ResultSet queryResult = execute(
-				"SELECT posted_at, body FROM userline WHERE username = '%s' AND posted_at < maxTimeuuid('%s') ORDER BY posted_at DESC LIMIT %d",
+				"SELECT posted_at, body FROM userline WHERE username = '%s' AND posted_at < maxTimeuuid('%d') ORDER BY posted_at DESC LIMIT %d",
 				username,
-				formatDate(start),
+				start.getTime(),
 				limit);
 		List<Tweet> tweets = new ArrayList<Tweet>();
 		
@@ -86,9 +86,9 @@ public class CassandraTweetRepository implements TweetRepository {
 	/** {@inheritDoc} */
 	public List<Tweet> getTimeline(String username, Date start, int limit) {
 		ResultSet queryResult = execute(
-				"SELECT posted_at, posted_by, body FROM timeline WHERE username = '%s' AND posted_at < maxTimeuuid('%s') ORDER BY posted_at DESC LIMIT %d",
+				"SELECT posted_at, posted_by, body FROM timeline WHERE username = '%s' AND posted_at < maxTimeuuid('%d') ORDER BY posted_at DESC LIMIT %d",
 				username,
-				formatDate(start),
+				start.getTime(),
 				limit);
 		List<Tweet> tweets = new ArrayList<Tweet>();
 		
@@ -99,7 +99,7 @@ public class CassandraTweetRepository implements TweetRepository {
 
 		return tweets;
 	}
-
+	
 	public List<Tweet> getTweets(Date start, int limit) {
 		return getTimeline(PUBLIC_USERLINE_KEY, start, limit);
 	}
@@ -177,10 +177,6 @@ public class CassandraTweetRepository implements TweetRepository {
 		String cql = String.format(query, parms);
 		LOG.debug("Executing CQL: {}", cql);
 		return session.execute(cql);
-	}
-
-	private String formatDate(Date date) {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 	}
 
 	private Date fromUUID1(UUID uuid) {
