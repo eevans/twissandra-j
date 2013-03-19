@@ -63,7 +63,7 @@
       functionality to Twitter.
     </p>
     <p>
-      View the code for this site <a href="http://github.com/ericflo/twissandra">on GitHub</a>
+      View the code for this site <a href="http://github.com/eevans/twissandra-j">on GitHub</a>
     </p>
     <tiles:insertAttribute name="sidebar" />
     </div>
