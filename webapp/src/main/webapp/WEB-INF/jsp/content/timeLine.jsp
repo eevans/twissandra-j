@@ -16,6 +16,7 @@
             </div>
             <input type="submit" value="Post Tweet" class="grid_3 omega">
             <div class="clear"></div>
+		    <h2 class="grid_4 suffix_5">${username}&rsquo;s Timeline</h2>
         </form>
         </sec:authorize>
         <sec:authorize access="!isAuthenticated()">

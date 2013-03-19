@@ -80,5 +80,18 @@ Once the query is performed in the controller:
                 <p>Enter a username above to see if they are on the site!</p>
               </c:otherwise>
             </c:choose>
+            
+            <sec:authorize access="isAuthenticated()">
+			    <h2 class="grid_4 suffix_5">${principal.name}&rsquo;s Friends</h2>
+                <ul id="timeline" class="grid_9 alpha">
+                <!--  ${friends} -->
+				 <c:forEach var="friend" items="${friends}">
+				    <c:url var="userUrl" value="/${friend}" />
+            		<li>
+                		<a href="${userUrl}" class="username">${friend}</a>
+            		</li>
+				 </c:forEach>                	
+              </ul>
+            </sec:authorize>
         </div>
     </div>

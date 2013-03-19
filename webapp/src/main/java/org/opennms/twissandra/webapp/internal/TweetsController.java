@@ -136,17 +136,21 @@ public class TweetsController {
 	@RequestMapping(value="/find-friends", method=RequestMethod.GET)
 	public String findFriends(Principal principal, Model model, @RequestParam(value="q", required=false)String queryString) {
 		boolean searched = false;
+		List<String> friends = Collections.emptyList();
+		if (principal != null) {
+			friends = m_tweetRepository.getFriends(principal.getName());
+		}
 		if (queryString != null) {
 			searched=true;
 			boolean isFound = m_tweetRepository.getPassword(queryString) != null;
 			boolean isFriend = false;
-			if (isFound) {
-				List<String> friends = m_tweetRepository.getFriends(principal.getName());
+			if (isFound && principal != null) {
 				isFriend = friends.contains(queryString);
 			}
 			model.addAttribute("isFound", isFound);
 			model.addAttribute("isFriend", isFriend);
 		}
+		model.addAttribute("friends", friends);
 		model.addAttribute("principal", principal);
 		model.addAttribute("q", queryString);
 		model.addAttribute("searched", searched);
@@ -171,7 +175,7 @@ public class TweetsController {
 		model.addAttribute("removed", removed);
 		
 		if (next != null) {
-			return "redirect:"+next;
+			return "redirect:/find-friends";
 		} else {
 			return "modifyFriend";
 		}
