@@ -1,10 +1,6 @@
 package org.opennms.twissandra.generator.internal;
 
-import java.io.IOException;
 import java.util.Random;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
@@ -17,6 +13,60 @@ public class GeneratorShellCommand extends OsgiCommandSupport {
 	private static final Logger LOG = LoggerFactory.getLogger(GeneratorShellCommand.class);
 	private static Random random = new Random();
 
+	private TweetRepository m_tweetRepository;
+	
+	public void setTweetRepository(TweetRepository tweetRepository) {
+		m_tweetRepository = tweetRepository;
+	}
+
+	@Override
+	protected Object doExecute() throws Exception {
+		outInfo("Loading test data...");
+
+		createUsers();
+		resetFriends();
+		createTweets();
+
+		outInfo("Done.");
+
+		return null;
+	}
+
+	private void createUsers() {
+		outInfo("Creating users...");
+
+		for (String user : USERS) {
+			m_tweetRepository.saveUser(user, "qwerty");
+		}
+	}
+
+	private void resetFriends() {
+		outInfo("Resetting social graph...");
+
+		for (String user : USERS) {
+			for (String friend : m_tweetRepository.getFriends(user)) {
+				m_tweetRepository.removeFriend(user, friend);
+			}
+
+			int numFriends = random.nextInt(USERS.length) + 1;
+			
+			// Number of friends might be less than numFriends; Good Enough
+			for (int i = 0; i < numFriends; i++) {
+				m_tweetRepository.addFriend(user, choose(USERS));
+			}
+		}
+	}
+
+	private void createTweets() {
+		outInfo("Generating random tweets...");
+
+		for (int i = 0; i < 10000; i++) {
+			m_tweetRepository.saveTweet(
+					choose(USERS),
+					String.format("%s %s %s", choose(VERBS), choose(ADJECTIVES), choose(NOUNS)));
+		}
+	}
+
 	private static void outInfo(String msg) {
 		outInfo(msg, new Object[]{});
 	}
@@ -28,59 +78,6 @@ public class GeneratorShellCommand extends OsgiCommandSupport {
 
 	private static String choose(String[] items) {
 		return items[random.nextInt(items.length)];
-	}
-
-	private static void createUsers(TweetRepository repo) {
-		outInfo("Creating users...");
-
-		for (String user : USERS) {
-			repo.saveUser(user, "qwerty");
-		}
-	}
-
-	private static void resetFriends(TweetRepository repo) {
-		outInfo("Resetting social graph...");
-
-		for (String user : USERS) {
-			for (String friend : repo.getFriends(user)) {
-				repo.removeFriend(user, friend);
-			}
-
-			int numFriends = random.nextInt(USERS.length) + 1;
-			
-			// Number of friends might be less than numFriends; Good Enough
-			for (int i = 0; i < numFriends; i++) {
-				repo.addFriend(user, choose(USERS));
-			}
-		}
-	}
-
-	private static void createTweets(TweetRepository repo) {
-		outInfo("Generating random tweets...");
-
-		for (int i = 0; i < 10000; i++) {
-			repo.saveTweet(choose(USERS), String.format("%s %s %s", choose(VERBS), choose(ADJECTIVES), choose(NOUNS)));
-		}
-	}
-	
-	private TweetRepository m_tweetRepository;
-	
-	public void setTweetRepository(TweetRepository tweetRepository) {
-		m_tweetRepository = tweetRepository;
-	}
-
-	@Override
-	protected Object doExecute() throws Exception {
-		outInfo("Loading test data...");
-
-
-		createUsers(m_tweetRepository);
-		resetFriends(m_tweetRepository);
-		createTweets(m_tweetRepository);
-
-		outInfo("Done.");
-
-		return null;
 	}
 
 	private static String[] USERS = {
