@@ -11,11 +11,12 @@
 	<jee:jndi-lookup id="tweetRepository" jndi-name="osgi:service/org.opennms.twissandra.api.TweetRepository" />
 
     <http use-expressions="true" auto-config="true">
+    <!-- 
         <intercept-url pattern="/find-friends" access="hasRole('ROLE_USER')"/>
-        <intercept-url pattern="/modify-friends" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/modify-friend" access="hasRole('ROLE_USER')"/>
+     -->
     	<intercept-url pattern="/**" access="permitAll"/>
 		<form-login login-page="/login" authentication-failure-url="/loginfailed" />
-		<logout logout-success-url="/logout" />
     </http>
     
 	<authentication-manager>

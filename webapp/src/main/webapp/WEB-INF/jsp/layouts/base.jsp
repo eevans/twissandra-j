@@ -10,6 +10,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
+
 <tiles:importAttribute name="description" />
 <tiles:importAttribute name="title" />
 
@@ -17,7 +18,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>${title}</title>
+  <title><tiles:insertAttribute name="title" /></title>
   <meta name="description" content="${description}" />
   <c:url var="resetCssUrl" value="/css/reset.css" />
   <c:url var="nine60CssUrl" value="/css/960.css" />
@@ -37,7 +38,7 @@
   <div class="container_12 clearfix">
     <div id="header">
       <div id="logo" class="grid_7">
-        <a href="${homeUrl}">${title}</a>
+        <a href="${homeUrl}">Twissandra-J</a>
       </div>
       <ul id="nav" class="grid_5">
         <li><a href="${homeUrl}">Home</a></li>

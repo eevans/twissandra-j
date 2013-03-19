@@ -9,7 +9,18 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-    <h2 class="grid_4 suffix_5">${username} Timeline</h2>
+        <sec:authorize access="isAuthenticated()">
+        <form method="POST" id="poster">
+            <div class="grid_9 alpha">
+                <textarea maxlength="140" name="body" type="text" id="id_body"></textarea>
+            </div>
+            <input type="submit" value="Post Tweet" class="grid_3 omega">
+            <div class="clear"></div>
+        </form>
+        </sec:authorize>
+        <sec:authorize access="!isAuthenticated()">
+        <h2 class="grid_4 suffix_5">Public Timeline</h2>
+		</sec:authorize>
     <ul id="timeline" class="grid_9 alpha">
     <c:choose>
       <c:when test="${empty tweets}">

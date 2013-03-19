@@ -26,29 +26,29 @@ import org.springframework.ui.Model;
 @Controller
 public class TweetsController {
 	
+	public static final String DEFAULT_LIMIT = "25";
+	
 	@Autowired
 	private TweetRepository m_tweetRepository;
 	
 	@Autowired
 	private UserDetailsService m_userManager;
 	
-	@ModelAttribute("username")
-	public String getUsername(Principal principal) {
-		return principal == null ? "Public" : principal.getName();
+	private Date check(Date start) {
+		return start == null ? new Date() : start;
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public String allTweets(Model model, Principal principal, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue="50")int limit) {
-		if (start == null) {
-			start = new Date();
-		}
+	public String allTweets(Model model, Principal principal, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
+		start = check(start);
 		if (principal == null) {
 			List<Tweet> tweets = m_tweetRepository.getTweets(start, limit);
 			// TODO: Add code that sets 'next' to the timestamp of the last one
 			model.addAttribute("tweets", tweets);
 			return "publicLine";
 		} else {
-			List<Tweet> tweets = m_tweetRepository.getTimeline(principal.getName(), start, 50);
+			List<Tweet> tweets = m_tweetRepository.getTimeline(principal.getName(), start, limit);
+			model.addAttribute("username", principal.getName());
 			model.addAttribute("tweets", tweets);
 			// TODO: Add code that sets 'next' to the timestamp of the last one
 			return "timeLine";
@@ -57,22 +57,22 @@ public class TweetsController {
 	}
 	
 	@RequestMapping(value="/public", method=RequestMethod.GET)
-	public String publicTweets(Model model) {
-//		List<Tweet> tweets = m_tweetRepository.getTweets(start, limit);
-//		// TODO: Add code that sets 'next' to the timestamp of the last one
-//		model.addAttribute("tweets", tweets);
+	public String publicTweets(Model model, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
+		start = check(start);
+		List<Tweet> tweets = m_tweetRepository.getTweets(start, limit);
+		// TODO: Add code that sets 'next' to the timestamp of the last one
+		model.addAttribute("tweets", tweets);
 		return "publicLine";		
 	}
 	
 	@RequestMapping(value="/{username}", method=RequestMethod.GET)
-	public String userTweets(@PathVariable String username, Model model) {
-		
-		List<Tweet> tweets = m_tweetRepository.getTimeline(username, new Date(), 50);
-
+	public String userTweets(@PathVariable String username, Model model, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
+		start = check(start);
+		List<Tweet> tweets = m_tweetRepository.getUserline(username, start, limit);
 		model.addAttribute("username", username);
 		model.addAttribute("tweets", tweets);
 		
-		return "tweets";
+		return "userLine";
 		
 	}
 
@@ -117,13 +117,46 @@ public class TweetsController {
 	}
 	
 	@RequestMapping(value="/find-friends", method=RequestMethod.GET)
-	public String findFriends() {
-		return "find_friends";
+	public String findFriends(Principal principal, Model model, @RequestParam(value="q", required=false)String queryString) {
+		boolean search = false;
+		if (queryString != null) {
+			boolean isFound = m_tweetRepository.getPassword(queryString) != null;
+			boolean isFriend = false;
+			if (isFound) {
+				List<String> friends = m_tweetRepository.getFriends(principal.getName());
+				isFriend = friends.contains(queryString);
+			}
+			model.addAttribute("isFound", isFound);
+			model.addAttribute("isFriend", isFriend);
+		}
+		model.addAttribute("q", queryString);
+		model.addAttribute("searched", search);
+		
+		return "addFriends";
 	}
 
-	@RequestMapping(value="/modify-friends", method=RequestMethod.GET)
-	public String modifyFriends() {
-		return "modify_friends";
+	@RequestMapping(value="/modify-friend", method=RequestMethod.POST)
+	public String modifyFriends(Principal principal, Model model, @RequestParam("action")String action, @RequestParam("friend")String friend, @RequestParam(value="next", required=false)String next) {
+
+		boolean added = false;
+		boolean removed = false;
+		if ("add".equals(action)) {
+			m_tweetRepository.addFriend(principal.getName(), friend);
+			added = true;
+		} else if ("remove".equals(action)) {
+			m_tweetRepository.removeFriend(principal.getName(), friend);
+			removed = true;
+		}
+		
+		model.addAttribute("added", added);
+		model.addAttribute("remvoed", removed);
+		
+		if (next != null) {
+			return "redirect:"+next;
+		} else {
+			return "modifyFriend";
+		}
+		
 	}
 	
 

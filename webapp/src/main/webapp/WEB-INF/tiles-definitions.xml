@@ -20,13 +20,33 @@
  <!-- Concrete page. To use this page, your controller must return the name "publicLine" -->
  <definition name="publicLine" extends="template-base">
   <put-attribute name="title" value="Public Timeline - Twissandra-J" />
-  <put-attribute name="content" value="/WEB-INF/jsp/content/tweets.jsp" />
+  <put-attribute name="content" value="/WEB-INF/jsp/content/publicLine.jsp" />
  </definition>
     
  <!-- Concrete page. To use this page, your controller must return the name "timeLine" -->
  <definition name="timeLine" extends="template-base">
-  <put-attribute name="title" value="Personal Timeline - Twissandra-J" />
-  <put-attribute name="content" value="/WEB-INF/jsp/content/tweets.jsp" />
+  <put-attribute name="title" value="My Timeline - Twissandra-J" />
+  <put-attribute name="content" value="/WEB-INF/jsp/content/timeLine.jsp" />
+  <put-attribute name="sidebar" value="/WEB-INF/jsp/content/postATweet.jsp" />
+ </definition>
+ 
+ <!-- Concrete page. To use this page, your controller must return the name "timeLine" -->
+ <definition name="userLine" extends="template-base">
+  <put-attribute name="title" value="/WEB-INF/jsp/content/userLineTitle.jsp" />
+  <put-attribute name="content" value="/WEB-INF/jsp/content/userLine.jsp" />
+  <put-attribute name="sidebar" value="/WEB-INF/jsp/content/addAFriend.jsp" />
+ </definition>
+ 
+ <!-- Concrete page. To use this page, your controller must return the name "timeLine" -->
+ <definition name="addFriends" extends="template-base">
+  <put-attribute name="title" value="Find and Add Friends - Twissandra-J" />
+  <put-attribute name="content" value="/WEB-INF/jsp/content/addFriends.jsp" />
+ </definition>
+ 
+ <!-- Concrete page. To use this page, your controller must return the name "timeLine" -->
+ <definition name="modifyFriend" extends="template-base">
+  <put-attribute name="title" value="Friend Changed - Twissandra-J" />
+  <put-attribute name="content" value="/WEB-INF/jsp/content/modifyFriend.jsp" />
  </definition>
  
  <!-- Concrete page. To use this page, your controller must return the name "publicLine" -->

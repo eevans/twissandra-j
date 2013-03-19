@@ -9,7 +9,8 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-    <h2 class="grid_4 suffix_5">${username} Timeline</h2>
+
+    <h2 class="grid_4 suffix_5">${username}&rsquo;s Tweets</h2>
     <ul id="timeline" class="grid_9 alpha">
     <c:choose>
       <c:when test="${empty tweets}">
@@ -29,4 +30,3 @@
         <li class="more"><a href="?start=${next}">More</a></li>
     </c:if>
     </ul>
-
