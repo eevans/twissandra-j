@@ -14,8 +14,12 @@ import java.util.UUID;
 
 import org.opennms.twissandra.api.Tweet;
 import org.opennms.twissandra.api.TweetRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MemoryTweetRepository implements TweetRepository {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(MemoryTweetRepository.class);
 	
 	Map<String, String> m_passwords = new HashMap<String, String>();
 	
@@ -28,24 +32,33 @@ public class MemoryTweetRepository implements TweetRepository {
 	SortedSet<Tweet> m_sorted_tweets = new TreeSet<Tweet>();
 
 	public String getPassword(String username) {
-		return m_passwords.get(username);
+		LOG.trace("Searching for password of user {}", username);
+		String pw = m_passwords.get(username);
+		LOG.trace("Found password for user {}: {}", username, pw);
+		return pw;
 	}
 
 	public List<String> getFriends(String username) {
+		LOG.trace("Searching for friend of user {}", username);
 		Set<String> friends = m_friends.get(username);
-		return friends == null ? Collections.<String>emptyList() : new ArrayList<String>(friends);
+		List<String> result = friends == null ? Collections.<String>emptyList() : new ArrayList<String>(friends);
+		LOG.trace("Found friends for user {}: {}", username, result);
+		return result;
 	}
 
 	public List<String> getFollowers(String username) {
+		LOG.trace("Searching for followers of user {}", username);
 		Set<String> followers = m_followers.get(username);
-		return followers == null ? Collections.<String>emptyList() : new ArrayList<String>(followers);
+		List<String> result = followers == null ? Collections.<String>emptyList() : new ArrayList<String>(followers);
+		LOG.trace("Found followers for user {}: {}", username, result);
+		return result;
 	}
 
 	public List<Tweet> getUserline(String username, Date start, int limit) {
 		List<Tweet> results = new ArrayList<Tweet>();
 
 		for (Tweet tweet : m_sorted_tweets) {
-			if (tweet.getPostedBy().equals(username) && tweet.getPostedAt().after(start) && results.size() < limit)
+			if (tweet.getPostedBy().equals(username) && tweet.getPostedAt().before(start) && results.size() < limit)
 				results.add(tweet);
 		}
 
@@ -59,7 +72,7 @@ public class MemoryTweetRepository implements TweetRepository {
 		List<Tweet> results = new ArrayList<Tweet>();
 
 		for (Tweet tweet : m_sorted_tweets) {
-			if (friends.contains(tweet.getPostedBy()) && tweet.getPostedAt().after(start) && results.size() < limit)
+			if (friends.contains(tweet.getPostedBy()) && tweet.getPostedAt().before(start) && results.size() < limit)
 				results.add(tweet);
 		}
 
@@ -71,17 +84,21 @@ public class MemoryTweetRepository implements TweetRepository {
 	}
 
 	public void saveUser(String username, String password) {
+		LOG.trace("Saving user {} with password: {}", username, password);
 		m_passwords.put(username, password);
 	}
 
 	public Tweet saveTweet(String username, String body) {
-		Tweet tweet = new Tweet(username, body, UUID.randomUUID(), new Date());
+		Date postedAt = new Date();
+		LOG.trace("Saving tweet for user {}: {} at {}", username, body, postedAt);
+		Tweet tweet = new Tweet(username, body, UUID.randomUUID(), postedAt);
 		m_tweets.put(tweet.getId(), tweet);
 		m_sorted_tweets.add(tweet);
 		return tweet;
 	}
 
 	public void addFriend(String username, String friend) {
+		LOG.trace("Adding friend for user {}: {}", username, friend);
 		Set<String> friends = m_friends.get(username);
 		if (friends == null) {
 			friends = new HashSet<String>();
@@ -91,6 +108,7 @@ public class MemoryTweetRepository implements TweetRepository {
 	}
 
 	public void removeFriend(String username, String friend) {
+		LOG.trace("Removing friend for user {}: {}", username, friend);
 		Set<String> friends = m_friends.get(username);
 		if (friends != null)
 			friends.remove(friend);
@@ -100,7 +118,7 @@ public class MemoryTweetRepository implements TweetRepository {
 		List<Tweet> results = new ArrayList<Tweet>();
 
 		for (Tweet tweet : m_sorted_tweets) {
-			if (tweet.getPostedAt().after(start) && results.size() < limit)
+			if (tweet.getPostedAt().before(start) && results.size() < limit)
 				results.add(tweet);
 		}
 
