@@ -27,7 +27,6 @@
             <feature>war</feature>
             <feature>jndi</feature>
           </features>
-B
         </configuration>
       </plugin>
     </plugins>
