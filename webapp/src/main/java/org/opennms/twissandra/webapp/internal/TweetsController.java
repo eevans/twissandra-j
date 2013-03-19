@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.opennms.twissandra.api.Tweet;
 import org.opennms.twissandra.api.TweetRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,8 @@ import org.springframework.ui.Model;
 
 @Controller
 public class TweetsController {
+	
+	public static final Logger LOG = LoggerFactory.getLogger(TweetsController.class);
 	
 	public static final String DEFAULT_LIMIT = "25";
 	
@@ -56,6 +60,13 @@ public class TweetsController {
 		
 	}
 	
+	@RequestMapping(value="/", method=RequestMethod.POST)
+	public String postTweet(Principal principal, @RequestParam("body")String body) {
+		LOG.info("saving tweet by {}: {}", principal.getName(), body);
+		m_tweetRepository.saveTweet(principal.getName(), body);
+		return "redirect:/";
+	}
+	
 	@RequestMapping(value="/public", method=RequestMethod.GET)
 	public String publicTweets(Model model, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
 		start = check(start);
@@ -66,11 +77,17 @@ public class TweetsController {
 	}
 	
 	@RequestMapping(value="/{username}", method=RequestMethod.GET)
-	public String userTweets(@PathVariable String username, Model model, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
+	public String userTweets(@PathVariable String username, Principal principal, Model model, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
 		start = check(start);
+		
 		List<Tweet> tweets = m_tweetRepository.getUserline(username, start, limit);
+		model.addAttribute("principal", principal);
 		model.addAttribute("username", username);
 		model.addAttribute("tweets", tweets);
+		if (principal != null) {
+			List<String> friends = m_tweetRepository.getFriends(principal.getName());
+			model.addAttribute("isFriend", friends.contains(username));
+		}
 		
 		return "userLine";
 		
@@ -118,8 +135,9 @@ public class TweetsController {
 	
 	@RequestMapping(value="/find-friends", method=RequestMethod.GET)
 	public String findFriends(Principal principal, Model model, @RequestParam(value="q", required=false)String queryString) {
-		boolean search = false;
+		boolean searched = false;
 		if (queryString != null) {
+			searched=true;
 			boolean isFound = m_tweetRepository.getPassword(queryString) != null;
 			boolean isFriend = false;
 			if (isFound) {
@@ -129,8 +147,9 @@ public class TweetsController {
 			model.addAttribute("isFound", isFound);
 			model.addAttribute("isFriend", isFriend);
 		}
+		model.addAttribute("principal", principal);
 		model.addAttribute("q", queryString);
-		model.addAttribute("searched", search);
+		model.addAttribute("searched", searched);
 		
 		return "addFriends";
 	}
@@ -149,7 +168,7 @@ public class TweetsController {
 		}
 		
 		model.addAttribute("added", added);
-		model.addAttribute("remvoed", removed);
+		model.addAttribute("removed", removed);
 		
 		if (next != null) {
 			return "redirect:"+next;

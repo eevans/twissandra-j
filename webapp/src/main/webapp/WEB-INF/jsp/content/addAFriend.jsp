@@ -10,21 +10,37 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
 
-        <sec:authorize access="isAuthenticated() and principal.name == username">
+        <sec:authorize access="isAuthenticated()">
+          <c:if test="${principal.name != username}">
             <c:url var="modifyFriendUrl" value="/modify-friend">
             	<c:param name="next" value="${request.path}" />
-            </c:url> 
+            </c:url>
+            <c:set var="action">
+              <c:choose>
+                <c:when test="${isFriend}">remove</c:when>
+                <c:otherwise>add</c:otherwise>
+              </c:choose>
+            </c:set>
+            <c:set var="buttonLabel">
+              <c:choose>
+                <c:when test="${isFriend}">Remove Friend</c:when>
+                <c:otherwise>Add Friend</c:otherwise>
+              </c:choose>
+            </c:set>
             <form method="POST" action="${modifyFriendUrl}">
-                <input type="hidden" name="{% if user.friend %}remove{% else %}add{% endif %}-friend" value="{{ user.id }}" />
-                <input type="submit" value="{% if user.friend %}Remove{% else %}Add{% endif %} Friend" />
+                <input type="hidden" name="friend" value="${username}" />
+                <input type="hidden" name="action" value="${action}" />
+                <input type="submit" value="${buttonLabel}" />
             </form>
+          </c:if>
         </sec:authorize>
         <sec:authorize access="!isAuthenticated()">
             <c:url var="loginUrl" value="/login">
-            	<c:param name="next" value="${request.path}" />
+            	<c:param name="next" value="/${username}" />
+            	<c:param name="q" value="${username}" />
             </c:url> 
-        <a href="{% url login %}?next={{ request.path }}&q={{ q }}">
-            Login to add ${username} as a friend
-        </a>
+           <a href="${loginUrl}">
+               Login to add ${username} as a friend
+           </a>
         </sec:authorize>
 

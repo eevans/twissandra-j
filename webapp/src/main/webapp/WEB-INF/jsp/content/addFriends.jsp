@@ -36,8 +36,9 @@ Once the query is performed in the controller:
                <c:choose>
                  <c:when test="${isFound}">
                     <p>Hooray, your friend ${q} is on the site!</p>
-                    <sec:authorize access="isAuthenticated() and q != principal.name">
-                       <c:url var="modifyFriendUrl" value="/modifyFriend">
+                    <sec:authorize access="isAuthenticated()">
+                     <c:if test="${principal.name != q}">
+                       <c:url var="modifyFriendUrl" value="/modify-friend">
                          <c:param name="next" value="${request.path}" />
                          <c:param name="q" value="${q}" />
                        </c:url>
@@ -58,6 +59,7 @@ Once the query is performed in the controller:
                          <input type="hidden" name="friend" value="${q}" />
                          <input type="submit" value="${buttonLabel}" />
                        </form>
+                     </c:if>
                     </sec:authorize>
                     <sec:authorize access="!isAuthenticated()">
                       <c:url var="loginUrl" value="/login">
