@@ -33,53 +33,50 @@ public class GeneratorShellCommand extends OsgiCommandSupport {
 	private static void createUsers(TweetRepository repo) {
 		outInfo("Creating users...");
 
-		for (String user : USERS)
+		for (String user : USERS) {
 			repo.saveUser(user, "qwerty");
+		}
 	}
 
 	private static void resetFriends(TweetRepository repo) {
 		outInfo("Resetting social graph...");
 
 		for (String user : USERS) {
-			for (String friend : repo.getFriends(user))
+			for (String friend : repo.getFriends(user)) {
 				repo.removeFriend(user, friend);
+			}
 
 			int numFriends = random.nextInt(USERS.length) + 1;
 			
 			// Number of friends might be less than numFriends; Good Enough
-			for (int i = 0; i < numFriends; i++)
+			for (int i = 0; i < numFriends; i++) {
 				repo.addFriend(user, choose(USERS));
+			}
 		}
 	}
 
 	private static void createTweets(TweetRepository repo) {
 		outInfo("Generating random tweets...");
 
-		for (int i = 0; i < 10000; i++)
+		for (int i = 0; i < 10000; i++) {
 			repo.saveTweet(choose(USERS), String.format("%s %s %s", choose(VERBS), choose(ADJECTIVES), choose(NOUNS)));
+		}
+	}
+	
+	private TweetRepository m_tweetRepository;
+	
+	public void setTweetRepository(TweetRepository tweetRepository) {
+		m_tweetRepository = tweetRepository;
 	}
 
 	@Override
 	protected Object doExecute() throws Exception {
 		outInfo("Loading test data...");
 
-		TweetRepository repository;
 
-		// Copypasta from o.o.t.webapp.internal.JNDIHelper (relocate?)
-		try {
-			InitialContext ic = new InitialContext();
-
-			repository = (TweetRepository)ic.lookup("osgi:service/" + TweetRepository.class.getName());
-		} catch (NamingException e) {
-			e.printStackTrace();
-			IOException ioe = new IOException("TweetRepository resolution failed");
-			ioe.initCause(e);
-			throw ioe;
-		}
-
-		createUsers(repository);
-		resetFriends(repository);
-		createTweets(repository);
+		createUsers(m_tweetRepository);
+		resetFriends(m_tweetRepository);
+		createTweets(m_tweetRepository);
 
 		outInfo("Done.");
 
