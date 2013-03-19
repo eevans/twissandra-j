@@ -37,8 +37,11 @@
         </c:forEach>
       </c:otherwise>
     </c:choose>
-    <c:if test="${next}">
-        <li class="more"><a href="?start=${next}">More</a></li>
+    <c:if test="${next != null}">
+    	<c:url var="nextUrl" value="">
+    	  <c:param name="start" value="${next.time}"/>
+    	</c:url>
+        <li class="more"><a href="${nextUrl}">More</a></li>
     </c:if>
     </ul>
 

@@ -16,6 +16,7 @@ public class UserService implements UserDetailsService {
 	
 	public static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 	
+	@SuppressWarnings("serial")
 	private static class User implements UserDetails {
 		
 		private static final GrantedAuthority ROLE_USER = new SimpleGrantedAuthority("ROLE_USER");

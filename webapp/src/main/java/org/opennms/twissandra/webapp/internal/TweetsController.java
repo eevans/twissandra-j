@@ -5,11 +5,15 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.text.DateFormatter;
+
 import org.opennms.twissandra.api.Tweet;
 import org.opennms.twissandra.api.TweetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +31,7 @@ public class TweetsController {
 	
 	public static final Logger LOG = LoggerFactory.getLogger(TweetsController.class);
 	
-	public static final String DEFAULT_LIMIT = "25";
+	public static final String DEFAULT_LIMIT = "10";
 	
 	@Autowired
 	private TweetRepository m_tweetRepository;
@@ -35,26 +39,39 @@ public class TweetsController {
 	@Autowired
 	private UserDetailsService m_userManager;
 	
-	private Date check(Date start) {
-		return start == null ? new Date() : start;
-	}
-	
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public String allTweets(Model model, Principal principal, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
-		start = check(start);
+	public String allTweets(Model model, Principal principal,
+			@RequestParam(value="start", defaultValue="0") long startMillis,
+			@RequestParam(value="limit", defaultValue=DEFAULT_LIMIT)int limit
+	) {
+		Date start = toDate(startMillis);
 		if (principal == null) {
-			List<Tweet> tweets = m_tweetRepository.getTweets(start, limit);
-			// TODO: Add code that sets 'next' to the timestamp of the last one
+			List<Tweet> tweets = m_tweetRepository.getTweets(start, limit+1);
+			if (tweets.size() > limit) {
+				// we have more than the limit so we need to set up the 'next' variable
+				Tweet lastTweet = tweets.get(limit-1);
+				model.addAttribute("next", lastTweet.getPostedAt());
+			}
 			model.addAttribute("tweets", tweets);
 			return "publicLine";
 		} else {
-			List<Tweet> tweets = m_tweetRepository.getTimeline(principal.getName(), start, limit);
+			List<Tweet> tweets = m_tweetRepository.getTimeline(principal.getName(), start, limit+1);
+			if (tweets.size() > limit) {
+				// we have more than the limit so we need to set up the 'next' variable
+				Tweet lastTweet = tweets.get(limit-1);
+				model.addAttribute("next", lastTweet.getPostedAt());
+			}
 			model.addAttribute("username", principal.getName());
 			model.addAttribute("tweets", tweets);
 			// TODO: Add code that sets 'next' to the timestamp of the last one
 			return "timeLine";
 		}
 		
+	}
+
+	private Date toDate(long startMillis) {
+		Date start = startMillis == 0 ? new Date() : new Date(startMillis);
+		return start;
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.POST)
@@ -68,19 +85,34 @@ public class TweetsController {
 	}
 	
 	@RequestMapping(value="/public", method=RequestMethod.GET)
-	public String publicTweets(Model model, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
-		start = check(start);
-		List<Tweet> tweets = m_tweetRepository.getTweets(start, limit);
-		// TODO: Add code that sets 'next' to the timestamp of the last one
+	public String publicTweets(Model model,
+			@RequestParam(value="start", defaultValue="0") long startMillis,
+			@RequestParam(value="limit", defaultValue=DEFAULT_LIMIT)int limit
+	) {
+		Date start = toDate(startMillis);
+		List<Tweet> tweets = m_tweetRepository.getTweets(start, limit+1);
+		if (tweets.size() > limit) {
+			// we have more than the limit so we need to set up the 'next' variable
+			Tweet lastTweet = tweets.get(limit-1);
+			model.addAttribute("next", lastTweet.getPostedAt());
+		}
 		model.addAttribute("tweets", tweets);
 		return "publicLine";		
 	}
 	
 	@RequestMapping(value="/{username}", method=RequestMethod.GET)
-	public String userTweets(@PathVariable String username, Principal principal, Model model, @RequestParam(value="start", required=false)Date start, @RequestParam(value="limit",defaultValue=DEFAULT_LIMIT)int limit) {
-		start = check(start);
+	public String userTweets(@PathVariable String username, Principal principal, Model model, 
+			@RequestParam(value="start", defaultValue="0") long startMillis,
+			@RequestParam(value="limit", defaultValue=DEFAULT_LIMIT)int limit
+	) {
+		Date start = toDate(startMillis);
 		
-		List<Tweet> tweets = m_tweetRepository.getUserline(username, start, limit);
+		List<Tweet> tweets = m_tweetRepository.getUserline(username, start, limit+1);
+		if (tweets.size() > limit) {
+			// we have more than the limit so we need to set up the 'next' variable
+			Tweet lastTweet = tweets.get(limit-1);
+			model.addAttribute("next", lastTweet.getPostedAt());
+		}
 		model.addAttribute("principal", principal);
 		model.addAttribute("username", username);
 		model.addAttribute("tweets", tweets);
@@ -109,7 +141,11 @@ public class TweetsController {
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public String register(@RequestParam("j_username")String username, @RequestParam("j_password")String password1, @RequestParam("j_password2")String password2, Model model) {
+	public String register(Model model,
+			@RequestParam("j_username")String username, 
+			@RequestParam("j_password")String password1, 
+			@RequestParam("j_password2")String password2 
+	) {
 		if (username == null || username.isEmpty()) {
 			return registrationError("username cannot be emtpy", model);
 		}
@@ -134,7 +170,9 @@ public class TweetsController {
 	}
 	
 	@RequestMapping(value="/find-friends", method=RequestMethod.GET)
-	public String findFriends(Principal principal, Model model, @RequestParam(value="q", required=false)String queryString) {
+	public String findFriends(Principal principal, Model model, 
+			@RequestParam(value="q", required=false)String queryString
+	) {
 		boolean searched = false;
 		List<String> friends = Collections.emptyList();
 		if (principal != null) {
@@ -159,7 +197,11 @@ public class TweetsController {
 	}
 
 	@RequestMapping(value="/modify-friend", method=RequestMethod.POST)
-	public String modifyFriends(Principal principal, Model model, @RequestParam("action")String action, @RequestParam("friend")String friend, @RequestParam(value="next", required=false)String next) {
+	public String modifyFriends(Principal principal, Model model, 
+			@RequestParam("action")String action, 
+			@RequestParam("friend")String friend, 
+			@RequestParam(value="next", required=false)String next
+	) {
 
 		boolean added = false;
 		boolean removed = false;
