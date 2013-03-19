@@ -62,8 +62,10 @@ public class TweetsController {
 	
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public String postTweet(Principal principal, @RequestParam("body")String body) {
-		LOG.info("saving tweet by {}: {}", principal.getName(), body);
-		m_tweetRepository.saveTweet(principal.getName(), body);
+		if (principal != null) {
+			LOG.info("saving tweet by {}: {}", principal.getName(), body);
+			m_tweetRepository.saveTweet(principal.getName(), body);
+		}
 		return "redirect:/";
 	}
 	
