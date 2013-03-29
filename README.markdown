@@ -1,9 +1,13 @@
 twissandra-j
 ============
 
-Twissandra-J is an OSGI-enabled Java example application created to learn and
+Twissandra-J is an OSGi-enabled Java example application created to learn and
 demonstrate Cassandra usage.  Running the project will present a website that
 has similar functionality to [Twitter](http://twitter.com).
+
+Twissandra-J is the Java cousin to
+[Twissandra](http://github.com/eevans/twissandra).  If your preferred language
+is Python, you may want to check it out instead.
 
 Requirements
 ------------
@@ -76,3 +80,64 @@ the karaf shell:
 
 If you've successfully reached this point, open up your browser and visit:
 http://localhost:8181/twissandra
+
+
+Schema Layout
+-------------
+
+In Cassandra, the way that your data is structured is very closely tied to how
+how it will be retrieved.  Let's start with the user table. The key is a
+username, and the columns are the properties on the user:
+
+    -- User storage
+    CREATE TABLE users (username text PRIMARY KEY, password text);
+
+Friends and followers are keyed by the username in the `following` and
+`followers` tables respectively.  The use of a compound PRIMARY KEY like
+this allows us to setup a one to many relationship between a user and the
+people they are following, or the people following them.
+    
+    -- Users user is following
+    CREATE TABLE following (
+        username text,
+        followed text,
+        PRIMARY KEY(username, followed)
+    );
+    
+    -- Users who follow user
+    CREATE TABLE followers (
+        username  text,
+        following text,
+        PRIMARY KEY(username, following)
+    );
+
+Tweets are stored with a UUID for the key.
+
+    -- Tweet storage
+    CREATE TABLE tweets (tweetid uuid PRIMARY KEY, username text, body text);
+
+The `timeline` and `userline` tables keep track of which tweets should
+appear, and in what order.  To that effect, the partition key is the
+username, with columns for the time each was posted, and the text of the
+tweet.
+
+The `timeline` table has an additional column for storing the user who
+authored the tweet.  This is because the timeline stores a materialized
+view of the tweets a user is interested in; tweets created by others:
+
+    -- Materialized view of tweets created by user
+    CREATE TABLE userline (
+        tweetid  timeuuid,
+        username text,
+        body     text,
+        PRIMARY KEY(username, tweetid)
+    );
+
+    -- Materialized view of tweets created by user, and users she follows
+    CREATE TABLE timeline (
+        username  text,
+        tweetid   timeuuid,
+        posted_by text,
+        body      text,
+        PRIMARY KEY(username, tweetid)
+    );
