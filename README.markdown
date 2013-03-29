@@ -1,13 +1,20 @@
-twissandra-j
+Twissandra-J
 ============
 
 Twissandra-J is an OSGi-enabled Java example application created to learn and
-demonstrate Cassandra usage.  Running the project will present a website that
-has similar functionality to [Twitter](http://twitter.com).
+demonstrate [Cassandra](http://cassandra.apache.org) usage, and the features
+of CQL v3+.  Running the project will present a website that has similar
+functionality to [Twitter](http://twitter.com).
+
+To jump straight to the data model-specific code, see the
+[CassandraTweetRepository class](https://github.com/eevans/twissandra-j/blob/master/persistence-cassandra/src/main/java/org/opennms/twissandra/persistence/cassandra/internal/CassandraTweetRepository.java).
+To see the CQL schema, check out the [Schema Layout](#schema-layout) section of
+this document.
 
 Twissandra-J is the Java cousin to
 [Twissandra](http://github.com/eevans/twissandra).  If your preferred language
 is Python, you may want to check it out instead.
+
 
 Requirements
 ------------
@@ -51,7 +58,7 @@ with Cassandra):
 
     $ /path/to/cassandra/bin/cqlsh < /path/to/twissandra-j/schema.cql
 
-### Starting Karaf and twissandra-j
+### Starting Karaf and Twissandra-J
 
 In order to be able to use the webapp correctly you must change the osgi
 implementation in your karaf distribution. To do this you must change
